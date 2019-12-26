@@ -1,13 +1,6 @@
 import React from 'react';
+import ContectChild from './ContectChild';
 
-class ContectChild extends React.Component {
-    render() {
-        return (<div>
-            이름:{this.props.value.name}, 
-            번호:{this.props.value.phone}
-        </div>)
-    }
-}
 class Contect extends React.Component {
 
     constructor(props) {
@@ -20,16 +13,33 @@ class Contect extends React.Component {
                   {name:"이순신", phone:4444}
             ]
         }
+        this.inputChage = this.inputChage.bind(this);
+    }
+    
+    inputChage(e) {
+        console.log(e.target.value);
+        this.setState({
+            keyword: document.getElementById("keyword").value
+        })
+        
     }
     
     render() {
         const mapResult = (data) =>{
+
+            data.sort();
+            
+
             return data.map( (info, i) => { //첫번째매개값: 데이터값, 두번째매개값: 인덱스
                 return (<ContectChild value={info} key={i}/>);
             } )
         }
         return (<div>
             <h1>컨택트</h1>
+            검색:<input name="keyword"
+                        id="keyword"
+                        value={this.state.keyword} 
+                        onChange={this.inputChage}/>
             <div>{mapResult(this.state.info)}</div>
         </div>)
     }
