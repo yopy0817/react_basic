@@ -1,10 +1,10 @@
 import React from 'react';
-import Contect from './Contect';
+import Contact from './Contact';
 
 function App() {
   return (
     <div>
-      <Contect/>
+      <Contact/>
     </div>
   );
 }
