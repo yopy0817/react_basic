@@ -1,5 +1,5 @@
 import React from 'react';
-import PropsTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 class ContactCreate extends React.Component {
     //1st
@@ -40,6 +40,15 @@ class ContactCreate extends React.Component {
             phone: ''
         })
 
+        this.nameInput.focus(); //ref사용
+        //document.getElementById("test").focus();
+    }
+
+    //엔터시에 등록처리메서드
+    inputKeyPress = (e) => {
+        if(e.charCode === 13) { //enter라는 뜻
+            this.inputClick();
+        }
     }
 
     render() {
@@ -48,21 +57,26 @@ class ContactCreate extends React.Component {
             <h2>추가하기</h2>
             <input type="text"
                    name="name"
+                   id="test"
                    placeholder="이름"
                    value={this.state.name}
-                   onChange={this.inputChange}/>
+                   onChange={this.inputChange}
+                   ref={ (ref) => {this.nameInput = ref} /* ref사용법(클릭이후에 실행하도록처리) */ }                   
+                   />
             <input type="text"
                    name="phone"
                    placeholder="번호"
                    value={this.state.phone}
-                   onChange={this.inputChange}/>
+                   onChange={this.inputChange}
+                   onKeyPress={this.inputKeyPress}
+                   />
             <button type="button" onClick={this.inputClick}>추가</button>       
         </div>)
     }
 }
 
 ContactCreate.propTypes = { //props스타입 선언
-    onCreate: PropsTypes.func //props타입은 함수
+    onCreate: PropTypes.func //props타입은 함수
 }
 
 export default ContactCreate;

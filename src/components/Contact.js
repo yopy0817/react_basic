@@ -21,6 +21,24 @@ class Contact extends React.Component {
         this.inputClick = this.inputClick.bind(this);
     }
     
+    //첫번째 랜더링 전에 실행되는 메서드
+    componentWillMount() {
+        const infoData = localStorage.getItem("infoData");
+        console.log(infoData);
+        if(infoData != null) {
+            this.setState({
+                info: JSON.parse(infoData)
+            })
+        }
+    }
+    //두번째 컴포넌트가 업데이트 된후에 실행(이전 프롭스, 이전스테이트)
+    componentDidUpdate(prevProps, prevState) {
+        if(JSON.stringify(prevState.info) != JSON.stringify(this.state.info) ) {
+            localStorage.setItem("infoData", JSON.stringify(this.state.info)); //로컬스토리지에 저장
+        }
+    }
+
+
     //input이 변경될떄마다 실행하는 메서드
     inputChange(e) {
         //console.log(e.target.value);
@@ -48,6 +66,9 @@ class Contact extends React.Component {
     }
 
     listRemove = () => {
+        if(this.state.keyindex < 0) {
+            return; //0보다 작으면 선택된 경우가 아니므로 삭제하지 않음
+        }
         this.setState({
             info: update(this.state.info, 
                          { $splice: [[this.state.keyindex, 1]] }),//react-addons-update의 삭제 메서드(배열의 배열전달)
@@ -91,7 +112,10 @@ class Contact extends React.Component {
                         onChange={this.inputChange}/>
             <div>{mapResult(this.state.info)}</div>
             <div>{<ContactResult keyindex={this.state.keyindex}
-                                 info={this.state.info[this.state.keyindex]}/>}
+                                 info={this.state.info[this.state.keyindex]}
+                                 listRemove={this.listRemove}
+                                 listEdit={this.listEdit}
+                                 />}
             </div>
             <div>
                 {<ContactCreate onCreate={this.listCreate}/>/*props으로 함수전달 */}               
